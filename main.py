@@ -6,6 +6,7 @@
 
 
 from motor_control.TMCM1111_utils import TMCM1111Controller
+from motor_control.Clamp_utils import ClampController
 import time
 import yaml
 
@@ -19,16 +20,8 @@ PORT2 = "COM14"  # Staker
 PORT3 = "COM15"  # Spindle
 
 
-clamp_motor = TMCM1111Controller(motor_config['clamp'])
+clamp_motor = ClampController(motor_config['clamp'])
 staker_motor = TMCM1111Controller(motor_config['staker'])
 spindle_motor = TMCM1111Controller(motor_config['spindle'])
 
-clamp_motor.rotate(10000)
-staker_motor.rotate(10000)
-spindle_motor.rotate(10000)
-
-time.sleep(5)
-
-clamp_motor.stop()
-staker_motor.stop()
-spindle_motor.stop()    
+clamp_motor.clamp()

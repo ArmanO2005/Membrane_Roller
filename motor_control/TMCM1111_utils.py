@@ -16,7 +16,6 @@ class TMCM1111Controller:
         self.AP = self.motor.AP
 
 
-    # figure out how homing works w OPB931W51Z Slotted Switch
     def home(self):
         print(f"[{self.name}] Homing started...")
 
@@ -38,12 +37,6 @@ class TMCM1111Controller:
         self.motor.set_axis_parameter(self.AP.ActualPosition, 0)
         print(f"[{self.name}] Homing complete. Position zeroed.")
 
-    def test_switch(self):
-        print("Monitoring home switch — block/unblock the slot...")
-        for _ in range(200):
-            val = self.motor.get_axis_parameter(self.AP.HomeSwitch)
-            print(f"Home switch: {val}")
-            time.sleep(0.05)
 
     def rotate(self, velocity):
         self.motor.rotate(velocity)
