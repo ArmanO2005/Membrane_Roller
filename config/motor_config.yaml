@@ -1,0 +1,20 @@
+spindle:
+  name: Spindle
+  port: COM15
+  home_search_velocity: 10000
+  home_timeout: 30
+  home_centering_time: 0.6
+
+clamp:
+  name: Clamp
+  port: COM14
+  home_search_velocity: 10000
+  home_timeout: 30
+  home_centering_time: 0.6
+
+staker:
+  name: Staker
+  port: COM13
+  home_search_velocity: 10000
+  home_timeout: 30
+  home_centering_time: 0.6
