@@ -41,6 +41,7 @@ class TMCM1111Controller:
     def rotate(self, velocity):
         self.motor.rotate(velocity)
 
+
     def stop(self):
         self.motor.stop()
 

@@ -1,10 +1,11 @@
 # from pytrinamic.connections import ConnectionManager
-# from pytrinamic.modules.TMCM1111 import TMCM1111
 # from pytrinamic.evalboards.TMC4671_eval import TMC4671_eval
-# from pytrinamic.ic.TMC4671 import TMC4671
-# import inspect
+# from pytrinamic.ic import TMC4671
 
 
+
+
+from motor_control.TMC4671_utils import TMC4671Controller
 from motor_control.TMCM1111_utils import TMCM1111Controller
 from motor_control.Clamp_utils import ClampController
 import time
@@ -23,5 +24,10 @@ PORT3 = "COM15"  # Spindle
 clamp_motor = ClampController(motor_config['clamp'])
 staker_motor = TMCM1111Controller(motor_config['staker'])
 spindle_motor = TMCM1111Controller(motor_config['spindle'])
+feeder_motor = TMC4671Controller(motor_config['feeder'])
 
-clamp_motor.clamp()
+feeder_motor.initialize()
+feeder_motor.rotate(-1)
+time.sleep(5)
+feeder_motor.stop()
+

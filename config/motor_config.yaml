@@ -21,3 +21,11 @@ clamp:
   home_search_velocity: 10000
   home_timeout: 30
   home_centering_time: 0.6
+
+feeder:
+  name: Feeder
+  port: COM3
+  velocity: 30
+  home_search_velocity: 30
+  home_timeout: 30
+  home_centering_time: 0.6
