@@ -4,23 +4,23 @@ spindle:
   velocity: 10000
   home_search_velocity: 10000
   home_timeout: 30
-  home_centering_time: 0.6
+  home_centering_time: 0.4
 
 staker:
   name: Staker
   port: COM14
-  velocity: 10000
-  home_search_velocity: 10000
+  velocity: 30000
+  home_search_velocity: 30000
   home_timeout: 30
-  home_centering_time: 0.6
+  home_centering_time: 0
 
 clamp:
   name: Clamp
   port: COM13
-  velocity: 10000
-  home_search_velocity: 10000
+  velocity: 60000
+  home_search_velocity: 60000
   home_timeout: 30
-  home_centering_time: 0.6
+  home_centering_time: 0.2
 
 feeder:
   name: Feeder
@@ -29,3 +29,4 @@ feeder:
   home_search_velocity: 30
   home_timeout: 30
   home_centering_time: 0.6
+  tip_timeout: 15

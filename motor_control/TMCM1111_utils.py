@@ -47,4 +47,16 @@ class TMCM1111Controller:
 
     def close(self):
         self.interface.close()
+    
+    def set_digital_output(self, pin: int) -> None:
+        self.interface.set_digital_output(pin, self.module.module_id)
+
+    def clear_digital_output(self, pin: int) -> None:
+        self.interface.clear_digital_output(pin, self.module.module_id)
+
+    def get_digital_output(self, pin: int) -> int:
+        return self.interface.get_digital_output(pin, self.module.module_id)
+
+    def get_digital_input(self, pin: int) -> int:
+        return self.interface.get_digital_input(pin, self.module.module_id)
 
