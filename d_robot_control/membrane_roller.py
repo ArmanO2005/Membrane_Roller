@@ -46,12 +46,12 @@ class MembraneRoller:
         if self.spindle_motor: self.spindle_motor.home()
         if self.lac:           self.lac.home()
 
-    def roll(self):
+    def roll(self, stake1_time=3, stake1_point=310000, stake2_time=5, stake2_point=310000):
         if self.clamp_motor:   self.clamp_motor.clamp()
         if self.feeder_motor:  self.feeder_motor.reach_tip()
-        if self.staker_motor:  self.staker_motor.stake()
+        if self.staker_motor:  self.staker_motor.stake(stake1_time, stake1_point)
         if self.spindle_motor: self.spindle_motor.full_rotation()
-        if self.staker_motor:  self.staker_motor.stake(5)
+        if self.staker_motor:  self.staker_motor.stake(stake2_time, stake2_point)
         if self.lac:           self.lac.cut()
         if self.clamp_motor:   self.clamp_motor.home()
         if self.feeder_motor:  self.feeder_motor.pull_back()

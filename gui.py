@@ -85,6 +85,34 @@ class App:
         self._btn(row, "Roll",       self._do_roll,       BLUE,  sequence=True).pack(side=tk.LEFT, padx=(0, 4))
         self._btn(row, "Shutdown",   self._do_off,        RED,   sequence=True).pack(side=tk.LEFT)
 
+        row_s1 = self._row(left)
+        tk.Label(row_s1, text="Stake 1 — Time (s):", bg=BG, fg=FG,
+                 font=('Segoe UI', 9)).pack(side=tk.LEFT, padx=(0, 4))
+        self.roll_stake1_time_var = tk.StringVar(value="3")
+        tk.Entry(row_s1, textvariable=self.roll_stake1_time_var, width=5,
+                 bg=SURFACE, fg=FG, insertbackground=FG,
+                 relief=tk.FLAT, font=('Segoe UI', 9)).pack(side=tk.LEFT, padx=(0, 10))
+        tk.Label(row_s1, text="Point:", bg=BG, fg=FG,
+                 font=('Segoe UI', 9)).pack(side=tk.LEFT, padx=(0, 4))
+        self.roll_stake1_point_var = tk.StringVar(value="310000")
+        tk.Entry(row_s1, textvariable=self.roll_stake1_point_var, width=8,
+                 bg=SURFACE, fg=FG, insertbackground=FG,
+                 relief=tk.FLAT, font=('Segoe UI', 9)).pack(side=tk.LEFT)
+
+        row_s2 = self._row(left)
+        tk.Label(row_s2, text="Stake 2 — Time (s):", bg=BG, fg=FG,
+                 font=('Segoe UI', 9)).pack(side=tk.LEFT, padx=(0, 4))
+        self.roll_stake2_time_var = tk.StringVar(value="5")
+        tk.Entry(row_s2, textvariable=self.roll_stake2_time_var, width=5,
+                 bg=SURFACE, fg=FG, insertbackground=FG,
+                 relief=tk.FLAT, font=('Segoe UI', 9)).pack(side=tk.LEFT, padx=(0, 10))
+        tk.Label(row_s2, text="Point:", bg=BG, fg=FG,
+                 font=('Segoe UI', 9)).pack(side=tk.LEFT, padx=(0, 4))
+        self.roll_stake2_point_var = tk.StringVar(value="310000")
+        tk.Entry(row_s2, textvariable=self.roll_stake2_point_var, width=8,
+                 bg=SURFACE, fg=FG, insertbackground=FG,
+                 relief=tk.FLAT, font=('Segoe UI', 9)).pack(side=tk.LEFT)
+
         # ---- heater ----
         self._section(left, "Heater")
         row = self._row(left)
@@ -299,7 +327,15 @@ class App:
         self._run(self.roller.initialize)
 
     def _do_roll(self):
-        self._run(self.roller.roll)
+        try:
+            s1_time  = float(self.roll_stake1_time_var.get())
+            s1_point = int(self.roll_stake1_point_var.get())
+            s2_time  = float(self.roll_stake2_time_var.get())
+            s2_point = int(self.roll_stake2_point_var.get())
+        except ValueError:
+            self._append("ERROR: Invalid stake parameter value.\n")
+            return
+        self._run(self.roller.roll, s1_time, s1_point, s2_time, s2_point)
 
     def _do_off(self):
         self._run(self.roller.off)
