@@ -105,6 +105,25 @@ class App:
         self._btn(row, "Go to Stake", self._do_staker_go,    subsystem='staker').pack(side=tk.LEFT, padx=(0, 4))
         self._btn(row, "Exit Stake",  self._do_staker_exit,  subsystem='staker').pack(side=tk.LEFT)
 
+        row2 = self._row(left)
+        tk.Label(row2, text="Time (s):", bg=BG, fg=FG,
+                 font=('Segoe UI', 9)).pack(side=tk.LEFT, padx=(0, 4))
+        self.stake_time_var = tk.StringVar(value="3")
+        stake_time_entry = tk.Entry(row2, textvariable=self.stake_time_var, width=5,
+                                    bg=SURFACE, fg=FG, insertbackground=FG,
+                                    relief=tk.FLAT, font=('Segoe UI', 9))
+        stake_time_entry.pack(side=tk.LEFT, padx=(0, 10))
+        self._subsystem_btns.setdefault('staker', []).append(stake_time_entry)
+
+        tk.Label(row2, text="Point:", bg=BG, fg=FG,
+                 font=('Segoe UI', 9)).pack(side=tk.LEFT, padx=(0, 4))
+        self.stake_point_var = tk.StringVar(value="310000")
+        stake_point_entry = tk.Entry(row2, textvariable=self.stake_point_var, width=8,
+                                     bg=SURFACE, fg=FG, insertbackground=FG,
+                                     relief=tk.FLAT, font=('Segoe UI', 9))
+        stake_point_entry.pack(side=tk.LEFT)
+        self._subsystem_btns.setdefault('staker', []).append(stake_point_entry)
+
         # ---- spindle ----
         self._section(left, "Spindle")
         row = self._row(left)
@@ -301,7 +320,13 @@ class App:
         self._run(self.roller.staker_motor.home)
 
     def _do_staker_stake(self):
-        self._run(self.roller.staker_motor.stake)
+        try:
+            stake_time = float(self.stake_time_var.get())
+            stake_point = int(self.stake_point_var.get())
+        except ValueError:
+            self._append("ERROR: Invalid stake_time or stake_point value.\n")
+            return
+        self._run(self.roller.staker_motor.stake, stake_time, stake_point)
 
     def _do_staker_go(self):
         self._run(self.roller.staker_motor.go_to_stake)
