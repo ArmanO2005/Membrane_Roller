@@ -81,3 +81,6 @@ class TMC4671Controller:
 
     def stop(self):
         self._write(TMC4671.REG.OPENLOOP_VELOCITY_TARGET, 0)
+
+    def close(self):
+        self.interface.close()

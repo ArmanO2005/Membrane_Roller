@@ -1,4 +1,4 @@
-from motor_control.TMCM1111_utils import TMCM1111Controller
+from c_motor_control.TMCM1111_utils import TMCM1111Controller
 import time
 
 class SpindleController(TMCM1111Controller):

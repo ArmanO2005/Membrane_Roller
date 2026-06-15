@@ -1,4 +1,4 @@
-from motor_control.TMC4671_utils import TMC4671Controller
+from c_motor_control.TMC4671_utils import TMC4671Controller
 from pytrinamic.ic.TMC4671 import TMC4671
 import time
 
