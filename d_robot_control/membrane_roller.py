@@ -51,9 +51,10 @@ class MembraneRoller:
         if self.feeder_motor:  self.feeder_motor.reach_tip()
         if self.staker_motor:  self.staker_motor.stake()
         if self.spindle_motor: self.spindle_motor.full_rotation()
-        if self.staker_motor:  self.staker_motor.stake()
+        if self.staker_motor:  self.staker_motor.stake(5)
         if self.lac:           self.lac.cut()
         if self.clamp_motor:   self.clamp_motor.home()
+        if self.feeder_motor:  self.feeder_motor.pull_back()
 
     def off(self):
         if self.staker_motor:  self.staker_motor.disable_heater()

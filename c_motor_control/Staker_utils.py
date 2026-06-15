@@ -17,27 +17,11 @@ class StakerController(TMCM1111Controller):
     def disable_heater(self):
         self.clear_digital_output(self.HEATER_PIN)
 
-    def stake(self):
-        self.home()
-        time.sleep(0.5)
-        self.rotate(self.config.get("velocity"))
-        time.sleep(10.5)
-        self.stop()
-        time.sleep(3)
-        self.rotate(-self.config.get("velocity") * 10)
-        time.sleep(1.5)
-        self.stop()
-        self.home()
+    def go_to_0(self):
+        self.move_to(1000, velocity=self.config.get("home_search_velocity"))
 
-    def go_to_stake(self):
-        self.home()
-        time.sleep(0.5)
-        self.rotate(self.config.get("velocity"))
-        time.sleep(10.55)
-        self.stop()
-
-    def exit_stake(self):
-        self.rotate(-self.config.get("velocity") * 10)
-        time.sleep(1.5)
-        self.stop()
-        self.home()
+    def stake(self, stake_time=3):
+        self.go_to_0()
+        self.move_to(310000, velocity=self.config.get("velocity"))
+        time.sleep(stake_time)
+        self.go_to_0()

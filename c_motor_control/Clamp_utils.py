@@ -38,10 +38,3 @@ class ClampController(TMCM1111Controller):
                 print(f"[{self.name}] Clamp position reached.")
                 break
 
-    def test_switch(self):
-        import time
-        print("Monitoring switch input — block/unblock the slot...")
-        for _ in range(50):
-            val = self.motor.get_axis_parameter(self.AP.LeftEndstop)
-            print(f"Input 0: {val}")
-            time.sleep(0.05)

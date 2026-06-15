@@ -59,4 +59,26 @@ class TMCM1111Controller:
 
     def get_digital_input(self, pin: int) -> int:
         return self.interface.get_digital_input(pin, self.module.module_id)
+    
+    def move_by(self, distance, velocity=None):
+        """Move by a relative distance in microsteps."""
+        if velocity is not None:
+            self.motor.set_axis_parameter(self.AP.MaxPositioningSpeed, velocity)
+        self.motor.move_by(distance)
 
+    def wait_for_position(self, timeout=15):
+        """Block until the motor reaches its target position."""
+        start = time.time()
+        while True:
+            if self.motor.get_axis_parameter(self.AP.PositionReachedFlag):
+                return
+            if time.time() - start > timeout:
+                raise TimeoutError(f"[{self.name}] Position move timed out")
+            time.sleep(0.01)
+
+    def move_to(self, position, velocity=None):
+        """Move to an absolute position in microsteps."""
+        if velocity is not None:
+            self.motor.set_axis_parameter(self.AP.MaxPositioningSpeed, velocity)
+        self.motor.move_to(position)
+        self.wait_for_position()
