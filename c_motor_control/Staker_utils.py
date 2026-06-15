@@ -24,5 +24,5 @@ class StakerController(TMCM1111Controller):
         self.go_to_0()
         self.move_to(stake_point, velocity=self.config.get("velocity"))
         time.sleep(stake_time)
-        self.move_to(200000, velocity=self.config.get("retract_velocity") * 5)
+        self.move_to(200000, velocity=(self.config.get("velocity") * 5))
         self.go_to_0()
