@@ -84,5 +84,6 @@ class LAC:
     def cut(self):
         """Move to fully extended position."""
         self.set_position(900)
+        time.sleep(1)
         self.set_position(0)
 
