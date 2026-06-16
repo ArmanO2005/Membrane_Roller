@@ -102,7 +102,7 @@ class App:
         row_s2 = self._row(left)
         tk.Label(row_s2, text="Stake 2 — Time (s):", bg=BG, fg=FG,
                  font=('Segoe UI', 9)).pack(side=tk.LEFT, padx=(0, 4))
-        self.roll_stake2_time_var = tk.StringVar(value="5")
+        self.roll_stake2_time_var = tk.StringVar(value="3")
         tk.Entry(row_s2, textvariable=self.roll_stake2_time_var, width=5,
                  bg=SURFACE, fg=FG, insertbackground=FG,
                  relief=tk.FLAT, font=('Segoe UI', 9)).pack(side=tk.LEFT, padx=(0, 10))
@@ -116,7 +116,7 @@ class App:
         row_rf = self._row(left)
         tk.Label(row_rf, text="Feeder — Rotations after tip:", bg=BG, fg=FG,
                  font=('Segoe UI', 9)).pack(side=tk.LEFT, padx=(0, 4))
-        self.roll_rotations_after_var = tk.StringVar(value="1.0")
+        self.roll_rotations_after_var = tk.StringVar(value="0.218")
         tk.Entry(row_rf, textvariable=self.roll_rotations_after_var, width=5,
                  bg=SURFACE, fg=FG, insertbackground=FG,
                  relief=tk.FLAT, font=('Segoe UI', 9)).pack(side=tk.LEFT)
@@ -192,7 +192,7 @@ class App:
         row_ff = self._row(left)
         tk.Label(row_ff, text="Rotations after tip:", bg=BG, fg=FG,
                  font=('Segoe UI', 9)).pack(side=tk.LEFT, padx=(0, 4))
-        self.feeder_rotations_after_var = tk.StringVar(value="1.0")
+        self.feeder_rotations_after_var = tk.StringVar(value="0.218")
         feeder_rot_entry = tk.Entry(row_ff, textvariable=self.feeder_rotations_after_var, width=5,
                                     bg=SURFACE, fg=FG, insertbackground=FG,
                                     relief=tk.FLAT, font=('Segoe UI', 9))
