@@ -94,7 +94,7 @@ class App:
                  relief=tk.FLAT, font=('Segoe UI', 9)).pack(side=tk.LEFT, padx=(0, 10))
         tk.Label(row_s1, text="Point:", bg=BG, fg=FG,
                  font=('Segoe UI', 9)).pack(side=tk.LEFT, padx=(0, 4))
-        self.roll_stake1_point_var = tk.StringVar(value="310000")
+        self.roll_stake1_point_var = tk.StringVar(value="307000")
         tk.Entry(row_s1, textvariable=self.roll_stake1_point_var, width=8,
                  bg=SURFACE, fg=FG, insertbackground=FG,
                  relief=tk.FLAT, font=('Segoe UI', 9)).pack(side=tk.LEFT)
@@ -108,8 +108,16 @@ class App:
                  relief=tk.FLAT, font=('Segoe UI', 9)).pack(side=tk.LEFT, padx=(0, 10))
         tk.Label(row_s2, text="Point:", bg=BG, fg=FG,
                  font=('Segoe UI', 9)).pack(side=tk.LEFT, padx=(0, 4))
-        self.roll_stake2_point_var = tk.StringVar(value="310000")
+        self.roll_stake2_point_var = tk.StringVar(value="307000")
         tk.Entry(row_s2, textvariable=self.roll_stake2_point_var, width=8,
+                 bg=SURFACE, fg=FG, insertbackground=FG,
+                 relief=tk.FLAT, font=('Segoe UI', 9)).pack(side=tk.LEFT)
+
+        row_rf = self._row(left)
+        tk.Label(row_rf, text="Feeder — Rotations after tip:", bg=BG, fg=FG,
+                 font=('Segoe UI', 9)).pack(side=tk.LEFT, padx=(0, 4))
+        self.roll_rotations_after_var = tk.StringVar(value="1.0")
+        tk.Entry(row_rf, textvariable=self.roll_rotations_after_var, width=5,
                  bg=SURFACE, fg=FG, insertbackground=FG,
                  relief=tk.FLAT, font=('Segoe UI', 9)).pack(side=tk.LEFT)
 
@@ -128,29 +136,45 @@ class App:
         # ---- staker ----
         self._section(left, "Staker")
         row = self._row(left)
-        self._btn(row, "Home",        self._do_staker_home,  subsystem='staker').pack(side=tk.LEFT, padx=(0, 4))
-        self._btn(row, "Stake",       self._do_staker_stake, subsystem='staker').pack(side=tk.LEFT, padx=(0, 4))
-        self._btn(row, "Go to Stake", self._do_staker_go,    subsystem='staker').pack(side=tk.LEFT, padx=(0, 4))
-        self._btn(row, "Exit Stake",  self._do_staker_exit,  subsystem='staker').pack(side=tk.LEFT)
+        self._btn(row, "Home",    self._do_staker_home,      subsystem='staker').pack(side=tk.LEFT, padx=(0, 4))
+        self._btn(row, "Stake 1", self._do_staker_stake_one, subsystem='staker').pack(side=tk.LEFT, padx=(0, 4))
+        self._btn(row, "Stake 2", self._do_staker_stake_two, subsystem='staker').pack(side=tk.LEFT)
 
-        row2 = self._row(left)
-        tk.Label(row2, text="Time (s):", bg=BG, fg=FG,
+        row_s1 = self._row(left)
+        tk.Label(row_s1, text="Stake 1 — Time (s):", bg=BG, fg=FG,
                  font=('Segoe UI', 9)).pack(side=tk.LEFT, padx=(0, 4))
-        self.stake_time_var = tk.StringVar(value="3")
-        stake_time_entry = tk.Entry(row2, textvariable=self.stake_time_var, width=5,
-                                    bg=SURFACE, fg=FG, insertbackground=FG,
-                                    relief=tk.FLAT, font=('Segoe UI', 9))
-        stake_time_entry.pack(side=tk.LEFT, padx=(0, 10))
-        self._subsystem_btns.setdefault('staker', []).append(stake_time_entry)
+        self.stake1_time_var = tk.StringVar(value="3")
+        s1_time_entry = tk.Entry(row_s1, textvariable=self.stake1_time_var, width=5,
+                                 bg=SURFACE, fg=FG, insertbackground=FG,
+                                 relief=tk.FLAT, font=('Segoe UI', 9))
+        s1_time_entry.pack(side=tk.LEFT, padx=(0, 10))
+        self._subsystem_btns.setdefault('staker', []).append(s1_time_entry)
+        tk.Label(row_s1, text="Point:", bg=BG, fg=FG,
+                 font=('Segoe UI', 9)).pack(side=tk.LEFT, padx=(0, 4))
+        self.stake1_point_var = tk.StringVar(value="307000")
+        s1_point_entry = tk.Entry(row_s1, textvariable=self.stake1_point_var, width=8,
+                                  bg=SURFACE, fg=FG, insertbackground=FG,
+                                  relief=tk.FLAT, font=('Segoe UI', 9))
+        s1_point_entry.pack(side=tk.LEFT)
+        self._subsystem_btns.setdefault('staker', []).append(s1_point_entry)
 
-        tk.Label(row2, text="Point:", bg=BG, fg=FG,
+        row_s2 = self._row(left)
+        tk.Label(row_s2, text="Stake 2 — Time (s):", bg=BG, fg=FG,
                  font=('Segoe UI', 9)).pack(side=tk.LEFT, padx=(0, 4))
-        self.stake_point_var = tk.StringVar(value="310000")
-        stake_point_entry = tk.Entry(row2, textvariable=self.stake_point_var, width=8,
-                                     bg=SURFACE, fg=FG, insertbackground=FG,
-                                     relief=tk.FLAT, font=('Segoe UI', 9))
-        stake_point_entry.pack(side=tk.LEFT)
-        self._subsystem_btns.setdefault('staker', []).append(stake_point_entry)
+        self.stake2_time_var = tk.StringVar(value="5")
+        s2_time_entry = tk.Entry(row_s2, textvariable=self.stake2_time_var, width=5,
+                                 bg=SURFACE, fg=FG, insertbackground=FG,
+                                 relief=tk.FLAT, font=('Segoe UI', 9))
+        s2_time_entry.pack(side=tk.LEFT, padx=(0, 10))
+        self._subsystem_btns.setdefault('staker', []).append(s2_time_entry)
+        tk.Label(row_s2, text="Point:", bg=BG, fg=FG,
+                 font=('Segoe UI', 9)).pack(side=tk.LEFT, padx=(0, 4))
+        self.stake2_point_var = tk.StringVar(value="307000")
+        s2_point_entry = tk.Entry(row_s2, textvariable=self.stake2_point_var, width=8,
+                                  bg=SURFACE, fg=FG, insertbackground=FG,
+                                  relief=tk.FLAT, font=('Segoe UI', 9))
+        s2_point_entry.pack(side=tk.LEFT)
+        self._subsystem_btns.setdefault('staker', []).append(s2_point_entry)
 
         # ---- spindle ----
         self._section(left, "Spindle")
@@ -164,6 +188,16 @@ class App:
         self._btn(row, "Reach Tip", self._do_feeder_tip,    subsystem='feeder').pack(side=tk.LEFT, padx=(0, 4))
         self._btn(row, "Reload",    self._do_feeder_reload, subsystem='feeder').pack(side=tk.LEFT, padx=(0, 4))
         self._btn(row, "Pull Back", self._do_feeder_pull,   subsystem='feeder').pack(side=tk.LEFT)
+
+        row_ff = self._row(left)
+        tk.Label(row_ff, text="Rotations after tip:", bg=BG, fg=FG,
+                 font=('Segoe UI', 9)).pack(side=tk.LEFT, padx=(0, 4))
+        self.feeder_rotations_after_var = tk.StringVar(value="1.0")
+        feeder_rot_entry = tk.Entry(row_ff, textvariable=self.feeder_rotations_after_var, width=5,
+                                    bg=SURFACE, fg=FG, insertbackground=FG,
+                                    relief=tk.FLAT, font=('Segoe UI', 9))
+        feeder_rot_entry.pack(side=tk.LEFT)
+        self._subsystem_btns.setdefault('feeder', []).append(feeder_rot_entry)
 
         # ---- LAC cutter ----
         self._section(left, "Cutter (LAC)")
@@ -328,14 +362,15 @@ class App:
 
     def _do_roll(self):
         try:
-            s1_time  = float(self.roll_stake1_time_var.get())
-            s1_point = int(self.roll_stake1_point_var.get())
-            s2_time  = float(self.roll_stake2_time_var.get())
-            s2_point = int(self.roll_stake2_point_var.get())
+            s1_time         = float(self.roll_stake1_time_var.get())
+            s1_point        = int(self.roll_stake1_point_var.get())
+            s2_time         = float(self.roll_stake2_time_var.get())
+            s2_point        = int(self.roll_stake2_point_var.get())
+            rotations_after = float(self.roll_rotations_after_var.get())
         except ValueError:
             self._append("ERROR: Invalid stake parameter value.\n")
             return
-        self._run(self.roller.roll, s1_time, s1_point, s2_time, s2_point)
+        self._run(self.roller.roll, s1_time, s1_point, s2_time, s2_point, rotations_after)
 
     def _do_off(self):
         self._run(self.roller.off)
@@ -355,20 +390,23 @@ class App:
     def _do_staker_home(self):
         self._run(self.roller.staker_motor.home)
 
-    def _do_staker_stake(self):
+    def _do_staker_stake_one(self):
         try:
-            stake_time = float(self.stake_time_var.get())
-            stake_point = int(self.stake_point_var.get())
+            stake_time  = float(self.stake1_time_var.get())
+            stake_point = int(self.stake1_point_var.get())
         except ValueError:
-            self._append("ERROR: Invalid stake_time or stake_point value.\n")
+            self._append("ERROR: Invalid Stake 1 time or point value.\n")
             return
-        self._run(self.roller.staker_motor.stake, stake_time, stake_point)
+        self._run(self.roller.staker_motor.stake_one, stake_time, stake_point)
 
-    def _do_staker_go(self):
-        self._run(self.roller.staker_motor.go_to_stake)
-
-    def _do_staker_exit(self):
-        self._run(self.roller.staker_motor.exit_stake)
+    def _do_staker_stake_two(self):
+        try:
+            stake_time  = float(self.stake2_time_var.get())
+            stake_point = int(self.stake2_point_var.get())
+        except ValueError:
+            self._append("ERROR: Invalid Stake 2 time or point value.\n")
+            return
+        self._run(self.roller.staker_motor.stake_two, stake_time, stake_point)
 
     def _do_spindle_home(self):
         self._run(self.roller.spindle_motor.home)
@@ -377,7 +415,12 @@ class App:
         self._run(self.roller.spindle_motor.full_rotation)
 
     def _do_feeder_tip(self):
-        self._run(self.roller.feeder_motor.reach_tip)
+        try:
+            rotations_after = float(self.feeder_rotations_after_var.get())
+        except ValueError:
+            self._append("ERROR: Invalid rotations value.\n")
+            return
+        self._run(self.roller.feeder_motor.reach_tip, rotations_after)
 
     def _do_feeder_reload(self):
         self._run(self.roller.feeder_motor.reload)

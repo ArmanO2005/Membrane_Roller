@@ -5,6 +5,12 @@ import time
 
 
 class TMC4671Controller:
+    # Derived from initialize() hardware config:
+    # PWM_FREQ = 100 MHz / (PWM_MAXCNT + 1) = 100e6 / 4000 = 25000 Hz
+    # POLE_PAIRS = lower 16 bits of MOTOR_TYPE_N_POLE_PAIRS = 0x0032 = 50
+    _PWM_FREQ   = 100_000_000 // (0x00000F9F + 1)  # 25 000 Hz
+    _POLE_PAIRS = 0x00020032 & 0xFFFF               # 50
+
     def __init__(self, config):
         self.config = config
         self.name = self.config.get("name")
@@ -78,6 +84,22 @@ class TMC4671Controller:
 
     def rotate(self, velocity):
         self._write(TMC4671.REG.OPENLOOP_VELOCITY_TARGET, velocity)
+
+    def move_by(self, rotations, velocity=None):
+        """Rotate by a given number of revolutions (open-loop, time-based).
+
+        rotations: positive = forward, negative = reverse
+        velocity:  register magnitude; defaults to config 'velocity'
+        """
+        if velocity is None:
+            velocity = self.config.get("velocity")
+        speed = abs(int(velocity))
+        mech_rps = speed * self._PWM_FREQ / (65536 * self._POLE_PAIRS)
+        duration = abs(rotations) / mech_rps
+        direction = 1 if rotations >= 0 else -1
+        self.rotate(direction * speed)
+        time.sleep(duration)
+        self.stop()
 
     def stop(self):
         self._write(TMC4671.REG.OPENLOOP_VELOCITY_TARGET, 0)

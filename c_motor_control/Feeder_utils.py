@@ -10,14 +10,13 @@ class FeederController(TMC4671Controller):
         not_triggered = self.module.read_register_field(TMC4671.FIELD.REF_SW_L_RAW)
         return not not_triggered
 
-    def reach_tip(self):
+    def reach_tip(self, rotations_after=1.0):
         self.rotate(-self.config.get("velocity"))
         start_time = time.time()
         while True:
             not_triggered = self.module.read_register_field(TMC4671.FIELD.REF_SW_H_RAW)
             if not not_triggered:
-                time.sleep(1)
-                self.stop()
+                self.move_by(-rotations_after)
                 break
             if time.time() - start_time > self.config.get("tip_timeout"):
                 self.stop()
