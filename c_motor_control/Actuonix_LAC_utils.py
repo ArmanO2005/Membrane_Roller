@@ -83,32 +83,6 @@ class LAC:
 
     def cut(self):
         """Move to fully extended position."""
-        pos = self.get_feedback()
-        if pos < 50:
-            self.set_position(900)
-        else:
-            self.set_position(0)
+        self.set_position(900)
+        self.set_position(0)
 
-
-# --- Usage ---
-if __name__ == "__main__":
-    lac = LAC()
-
-    # Move to midpoint (512 = 50% of stroke)
-    print("Moving to midpoint...")
-    lac.set_position(512)
-    time.sleep(2)
-
-    # Read back position
-    pos = lac.get_feedback()
-    print(f"Current position: {pos} / 1023  ({pos/1023*100:.1f}%)")
-
-    # Move to full extension
-    print("Extending fully...")
-    lac.set_position(1023)
-    time.sleep(3)
-
-    # Move to full retraction
-    print("Retracting fully...")
-    lac.set_position(0)
-    time.sleep(3)
