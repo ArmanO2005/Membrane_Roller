@@ -4,6 +4,9 @@ import threading
 import queue
 import sys
 import yaml
+from pathlib import Path
+
+_CONFIG_PATH = Path(__file__).parent / 'a_config' / 'motor_config.yaml'
 
 
 BG      = '#1e1e2e'
@@ -343,7 +346,7 @@ class App:
     def _do_connect(self):
         def connect():
             from d_robot_control.membrane_roller import MembraneRoller
-            with open('a_config/motor_config.yaml', 'r') as f:
+            with open(_CONFIG_PATH, 'r') as f:
                 config = yaml.safe_load(f)
             sys.stdout.write("Connecting to motors...\n")
             self.roller = MembraneRoller(config)

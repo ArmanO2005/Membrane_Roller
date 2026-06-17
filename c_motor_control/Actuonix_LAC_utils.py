@@ -1,9 +1,22 @@
+import importlib.util
+import platform
 import struct
 import usb.core
 import usb.backend.libusb1
 import time
+from pathlib import Path
 
-DLL = r"C:\Python312\Lib\site-packages\libusb\_platform\windows\x86_64\libusb-1.0.dll"
+
+def _find_libusb_dll():
+    spec = importlib.util.find_spec('libusb')
+    if spec is None or spec.origin is None:
+        return None
+    arch = 'x86_64' if platform.machine().endswith('64') else 'x86'
+    dll = Path(spec.origin).parent / '_platform' / 'windows' / arch / 'libusb-1.0.dll'
+    return str(dll) if dll.exists() else None
+
+
+DLL = _find_libusb_dll()
 
 class LAC:
     # Command bytes
