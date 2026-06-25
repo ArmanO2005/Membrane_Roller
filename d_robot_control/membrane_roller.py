@@ -33,7 +33,7 @@ class MembraneRoller:
         
     def tensionless_rotation(self, paired_velocity=30):
         self.spindle_motor.motor.rotate(self.spindle_motor.config.get("velocity"))
-        self.feeder_motor.motor.rotate(paired_velocity)
+        self.feeder_motor.rotate(paired_velocity)
         time.sleep(2)
         start_time = time.time()
         while True:
@@ -41,12 +41,12 @@ class MembraneRoller:
             if not not_triggered:
                 time.sleep(0.7)
                 self.spindle_motor.motor.stop()
-                self.feeder_motor.motor.stop()
+                self.feeder_motor.stop()
                 print(f"[{self.spindle_motor.name}] Switch triggered.")
                 break
             if time.time() - start_time > self.spindle_motor.config.get("home_timeout"):
                 self.spindle_motor.motor.stop()
-                self.feeder_motor.motor.stop()
+                self.feeder_motor.stop()
                 raise TimeoutError(f"[{self.spindle_motor.name}] Homing timed out")
             time.sleep(0.01)
 
@@ -73,7 +73,7 @@ class MembraneRoller:
         if self.feeder_motor:  self.feeder_motor.reach_tip(rotations_after)
         if self.staker_motor:  self.staker_motor.stake_one(stake1_time, stake1_point)
         if self.spindle_motor: self.tensionless_rotation(paired_velocity)
-        if self.staker_motor:  self.staker_motor.stake_two(stake2_time, stake2_point)
+        if self.staker_motor and self.feeder_motor:  self.staker_motor.stake_two(stake2_time, stake2_point)
         if self.lac:           self.lac.cut()
         if self.clamp_motor:   self.clamp_motor.home()
         if self.feeder_motor:  self.feeder_motor.pull_back()
