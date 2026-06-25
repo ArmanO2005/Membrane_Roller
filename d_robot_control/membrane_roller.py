@@ -30,6 +30,28 @@ class MembraneRoller:
         except Exception as e:
             print(f"[LAC] Connection failed: {e}")
             return None
+        
+    def tensionless_rotation(self, paired_velocity=30):
+        self.spindle_motor.motor.rotate(self.spindle_motor.config.get("velocity"))
+        self.feeder_motor.motor.rotate(paired_velocity)
+        time.sleep(2)
+        start_time = time.time()
+        while True:
+            not_triggered = self.spindle_motor.motor.get_axis_parameter(self.spindle_motor.AP.HomeSwitch)
+            if not not_triggered:
+                time.sleep(0.7)
+                self.spindle_motor.motor.stop()
+                self.feeder_motor.motor.stop()
+                print(f"[{self.spindle_motor.name}] Switch triggered.")
+                break
+            if time.time() - start_time > self.spindle_motor.config.get("home_timeout"):
+                self.spindle_motor.motor.stop()
+                self.feeder_motor.motor.stop()
+                raise TimeoutError(f"[{self.spindle_motor.name}] Homing timed out")
+            time.sleep(0.01)
+
+
+        self.spindle_motor.motor.set_axis_parameter(self.spindle_motor.AP.ActualPosition, 0)
 
     def close(self):
         for motor in (self.clamp_motor, self.staker_motor, self.spindle_motor, self.feeder_motor):
@@ -46,11 +68,11 @@ class MembraneRoller:
         if self.spindle_motor: self.spindle_motor.home()
         if self.lac:           self.lac.home()
 
-    def roll(self, stake1_time=3, stake1_point=310000, stake2_time=5, stake2_point=310000, rotations_after=1.0):
+    def roll(self, stake1_time=3, stake1_point=310000, stake2_time=5, stake2_point=310000, rotations_after=1.0, paired_velocity=30):
         if self.clamp_motor:   self.clamp_motor.clamp()
         if self.feeder_motor:  self.feeder_motor.reach_tip(rotations_after)
         if self.staker_motor:  self.staker_motor.stake_one(stake1_time, stake1_point)
-        if self.spindle_motor: self.spindle_motor.full_rotation()
+        if self.spindle_motor: self.tensionless_rotation(paired_velocity)
         if self.staker_motor:  self.staker_motor.stake_two(stake2_time, stake2_point)
         if self.lac:           self.lac.cut()
         if self.clamp_motor:   self.clamp_motor.home()

@@ -124,6 +124,14 @@ class App:
                  bg=SURFACE, fg=FG, insertbackground=FG,
                  relief=tk.FLAT, font=('Segoe UI', 9)).pack(side=tk.LEFT)
 
+        row_pv = self._row(left)
+        tk.Label(row_pv, text="Spindle — Feeder paired velocity:", bg=BG, fg=FG,
+                 font=('Segoe UI', 9)).pack(side=tk.LEFT, padx=(0, 4))
+        self.roll_paired_velocity_var = tk.StringVar(value="30")
+        tk.Entry(row_pv, textvariable=self.roll_paired_velocity_var, width=5,
+                 bg=SURFACE, fg=FG, insertbackground=FG,
+                 relief=tk.FLAT, font=('Segoe UI', 9)).pack(side=tk.LEFT)
+
         # ---- heater ----
         self._section(left, "Heater")
         row = self._row(left)
@@ -370,10 +378,11 @@ class App:
             s2_time         = float(self.roll_stake2_time_var.get())
             s2_point        = int(self.roll_stake2_point_var.get())
             rotations_after = float(self.roll_rotations_after_var.get())
+            paired_velocity = int(self.roll_paired_velocity_var.get())
         except ValueError:
             self._append("ERROR: Invalid stake parameter value.\n")
             return
-        self._run(self.roller.roll, s1_time, s1_point, s2_time, s2_point, rotations_after)
+        self._run(self.roller.roll, s1_time, s1_point, s2_time, s2_point, rotations_after, paired_velocity)
 
     def _do_off(self):
         self._run(self.roller.off)
