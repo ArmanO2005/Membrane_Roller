@@ -31,7 +31,7 @@ class MembraneRoller:
             print(f"[LAC] Connection failed: {e}")
             return None
         
-    def tensionless_rotation(self, paired_velocity=30):
+    def tensionless_rotation(self, paired_velocity=-3):
         self.spindle_motor.motor.rotate(self.spindle_motor.config.get("velocity"))
         self.feeder_motor.rotate(paired_velocity)
         time.sleep(2)
