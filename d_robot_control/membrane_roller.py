@@ -39,7 +39,7 @@ class MembraneRoller:
         while True:
             not_triggered = self.spindle_motor.motor.get_axis_parameter(self.spindle_motor.AP.HomeSwitch)
             if not not_triggered:
-                time.sleep(0.7)
+                time.sleep(self.spindle_motor.config.get("velocity") / 1714)
                 self.spindle_motor.motor.stop()
                 self.feeder_motor.stop()
                 print(f"[{self.spindle_motor.name}] Switch triggered.")
