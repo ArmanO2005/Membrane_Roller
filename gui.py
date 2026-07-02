@@ -97,7 +97,7 @@ class App:
                  relief=tk.FLAT, font=('Segoe UI', 9)).pack(side=tk.LEFT, padx=(0, 10))
         tk.Label(row_s1, text="Point:", bg=BG, fg=FG,
                  font=('Segoe UI', 9)).pack(side=tk.LEFT, padx=(0, 4))
-        self.roll_stake1_point_var = tk.StringVar(value="313000")
+        self.roll_stake1_point_var = tk.StringVar(value="307000")
         tk.Entry(row_s1, textvariable=self.roll_stake1_point_var, width=8,
                  bg=SURFACE, fg=FG, insertbackground=FG,
                  relief=tk.FLAT, font=('Segoe UI', 9)).pack(side=tk.LEFT)
@@ -111,7 +111,7 @@ class App:
                  relief=tk.FLAT, font=('Segoe UI', 9)).pack(side=tk.LEFT, padx=(0, 10))
         tk.Label(row_s2, text="Point:", bg=BG, fg=FG,
                  font=('Segoe UI', 9)).pack(side=tk.LEFT, padx=(0, 4))
-        self.roll_stake2_point_var = tk.StringVar(value="313000")
+        self.roll_stake2_point_var = tk.StringVar(value="307000")
         tk.Entry(row_s2, textvariable=self.roll_stake2_point_var, width=8,
                  bg=SURFACE, fg=FG, insertbackground=FG,
                  relief=tk.FLAT, font=('Segoe UI', 9)).pack(side=tk.LEFT)
@@ -162,7 +162,7 @@ class App:
         self._subsystem_btns.setdefault('staker', []).append(s1_time_entry)
         tk.Label(row_s1, text="Point:", bg=BG, fg=FG,
                  font=('Segoe UI', 9)).pack(side=tk.LEFT, padx=(0, 4))
-        self.stake1_point_var = tk.StringVar(value="31300")
+        self.stake1_point_var = tk.StringVar(value="30700")
         s1_point_entry = tk.Entry(row_s1, textvariable=self.stake1_point_var, width=8,
                                   bg=SURFACE, fg=FG, insertbackground=FG,
                                   relief=tk.FLAT, font=('Segoe UI', 9))
@@ -180,7 +180,7 @@ class App:
         self._subsystem_btns.setdefault('staker', []).append(s2_time_entry)
         tk.Label(row_s2, text="Point:", bg=BG, fg=FG,
                  font=('Segoe UI', 9)).pack(side=tk.LEFT, padx=(0, 4))
-        self.stake2_point_var = tk.StringVar(value="313000")
+        self.stake2_point_var = tk.StringVar(value="307000")
         s2_point_entry = tk.Entry(row_s2, textvariable=self.stake2_point_var, width=8,
                                   bg=SURFACE, fg=FG, insertbackground=FG,
                                   relief=tk.FLAT, font=('Segoe UI', 9))

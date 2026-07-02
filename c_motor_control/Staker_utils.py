@@ -20,8 +20,8 @@ class StakerController(TMCM1111Controller):
     def go_to_0(self):
         self.move_to(1000, velocity=self.config.get("home_search_velocity"))
 
-    def home(self):
-        self.go_to_0()
+    # def home(self):
+    #     self.go_to_0()
 
     def stake_one(self, stake_time=3, stake_point=307000):
         self.go_to_0()
