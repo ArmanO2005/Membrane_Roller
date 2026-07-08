@@ -5,6 +5,7 @@ spindle:
   home_search_velocity: 10000
   home_timeout: 30
   home_centering_time: 0.4
+  notch_increments: 1000
 
 staker:
   name: Staker
