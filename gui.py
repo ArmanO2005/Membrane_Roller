@@ -91,13 +91,13 @@ class App:
         row_s1 = self._row(left)
         tk.Label(row_s1, text="Stake 1 — Time (s):", bg=BG, fg=FG,
                  font=('Segoe UI', 9)).pack(side=tk.LEFT, padx=(0, 4))
-        self.roll_stake1_time_var = tk.StringVar(value="3")
+        self.roll_stake1_time_var = tk.StringVar(value="2")
         tk.Entry(row_s1, textvariable=self.roll_stake1_time_var, width=5,
                  bg=SURFACE, fg=FG, insertbackground=FG,
                  relief=tk.FLAT, font=('Segoe UI', 9)).pack(side=tk.LEFT, padx=(0, 10))
         tk.Label(row_s1, text="Point:", bg=BG, fg=FG,
                  font=('Segoe UI', 9)).pack(side=tk.LEFT, padx=(0, 4))
-        self.roll_stake1_point_var = tk.StringVar(value="307000")
+        self.roll_stake1_point_var = tk.StringVar(value="305000")
         tk.Entry(row_s1, textvariable=self.roll_stake1_point_var, width=8,
                  bg=SURFACE, fg=FG, insertbackground=FG,
                  relief=tk.FLAT, font=('Segoe UI', 9)).pack(side=tk.LEFT)
@@ -105,13 +105,13 @@ class App:
         row_s2 = self._row(left)
         tk.Label(row_s2, text="Stake 2 — Time (s):", bg=BG, fg=FG,
                  font=('Segoe UI', 9)).pack(side=tk.LEFT, padx=(0, 4))
-        self.roll_stake2_time_var = tk.StringVar(value="3")
+        self.roll_stake2_time_var = tk.StringVar(value="2")
         tk.Entry(row_s2, textvariable=self.roll_stake2_time_var, width=5,
                  bg=SURFACE, fg=FG, insertbackground=FG,
                  relief=tk.FLAT, font=('Segoe UI', 9)).pack(side=tk.LEFT, padx=(0, 10))
         tk.Label(row_s2, text="Point:", bg=BG, fg=FG,
                  font=('Segoe UI', 9)).pack(side=tk.LEFT, padx=(0, 4))
-        self.roll_stake2_point_var = tk.StringVar(value="307000")
+        self.roll_stake2_point_var = tk.StringVar(value="305000")
         tk.Entry(row_s2, textvariable=self.roll_stake2_point_var, width=8,
                  bg=SURFACE, fg=FG, insertbackground=FG,
                  relief=tk.FLAT, font=('Segoe UI', 9)).pack(side=tk.LEFT)
@@ -119,7 +119,7 @@ class App:
         row_rf = self._row(left)
         tk.Label(row_rf, text="Feeder — Rotations after tip:", bg=BG, fg=FG,
                  font=('Segoe UI', 9)).pack(side=tk.LEFT, padx=(0, 4))
-        self.roll_rotations_after_var = tk.StringVar(value="0.218")
+        self.roll_rotations_after_var = tk.StringVar(value="0.223")
         tk.Entry(row_rf, textvariable=self.roll_rotations_after_var, width=5,
                  bg=SURFACE, fg=FG, insertbackground=FG,
                  relief=tk.FLAT, font=('Segoe UI', 9)).pack(side=tk.LEFT)
@@ -162,7 +162,7 @@ class App:
         self._subsystem_btns.setdefault('staker', []).append(s1_time_entry)
         tk.Label(row_s1, text="Point:", bg=BG, fg=FG,
                  font=('Segoe UI', 9)).pack(side=tk.LEFT, padx=(0, 4))
-        self.stake1_point_var = tk.StringVar(value="30700")
+        self.stake1_point_var = tk.StringVar(value="30500")
         s1_point_entry = tk.Entry(row_s1, textvariable=self.stake1_point_var, width=8,
                                   bg=SURFACE, fg=FG, insertbackground=FG,
                                   relief=tk.FLAT, font=('Segoe UI', 9))
@@ -180,7 +180,7 @@ class App:
         self._subsystem_btns.setdefault('staker', []).append(s2_time_entry)
         tk.Label(row_s2, text="Point:", bg=BG, fg=FG,
                  font=('Segoe UI', 9)).pack(side=tk.LEFT, padx=(0, 4))
-        self.stake2_point_var = tk.StringVar(value="307000")
+        self.stake2_point_var = tk.StringVar(value="305000")
         s2_point_entry = tk.Entry(row_s2, textvariable=self.stake2_point_var, width=8,
                                   bg=SURFACE, fg=FG, insertbackground=FG,
                                   relief=tk.FLAT, font=('Segoe UI', 9))
