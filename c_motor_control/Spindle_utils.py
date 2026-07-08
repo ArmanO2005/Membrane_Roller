@@ -13,10 +13,18 @@ class SpindleController(TMCM1111Controller):
 
         super().home()
 
+        print('h')
+
         self.motor.set_axis_parameter(self.AP.ActualPosition, 0)
 
+        print('he')
+        
         self.motor.rotate(self.config.get("velocity"))
+        print('hel')
+
         time.sleep(self.config.get("notch_time"))
+        print('hell')
+        
         self.motor.stop()
 
 
