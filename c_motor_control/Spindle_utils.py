@@ -15,7 +15,7 @@ class SpindleController(TMCM1111Controller):
 
         self.motor.set_axis_parameter(self.AP.ActualPosition, 0)
 
-        self.move_by(-self.config.get("notch_increments"), self.config.get("velocity"))
+        self.move_by(self.config.get("notch_increments"), self.config.get("velocity"))
 
 
     def full_rotation(self):
@@ -26,8 +26,9 @@ class SpindleController(TMCM1111Controller):
             not_triggered = self.motor.get_axis_parameter(self.AP.HomeSwitch)
             if not not_triggered:
                 self.motor.stop()
+                self.wait_for_stop()
                 print(f"[{self.name}] Switch triggered.")
-                self.move_by(-self.config.get("notch_increments"), self.config.get("velocity"))
+                self.move_by(self.config.get("notch_increments"), self.config.get("velocity"))
                 break
             if time.time() - start_time > self.config.get("home_timeout"):
                 self.motor.stop()

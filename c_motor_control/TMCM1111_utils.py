@@ -26,6 +26,7 @@ class TMCM1111Controller:
             if not not_triggered:
                 time.sleep(self.config.get("home_centering_time"))
                 self.motor.stop()
+                self.wait_for_stop()
                 print(f"[{self.name}] Switch triggered.")
                 break
             if time.time() - start_time > self.config.get("home_timeout"):
@@ -44,6 +45,16 @@ class TMCM1111Controller:
 
     def stop(self):
         self.motor.stop()
+
+    def wait_for_stop(self, timeout=15):
+        """Block until the motor's actual velocity settles to zero."""
+        start = time.time()
+        while True:
+            if self.motor.get_axis_parameter(self.AP.ActualVelocity, True) == 0:
+                return
+            if time.time() - start > timeout:
+                raise TimeoutError(f"[{self.name}] Motor did not come to a stop in time")
+            time.sleep(0.01)
 
     def close(self):
         self.interface.close()
