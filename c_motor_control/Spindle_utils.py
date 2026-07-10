@@ -4,6 +4,7 @@ import time
 class SpindleController(TMCM1111Controller):
     def __init__(self, config):
         super().__init__(config)
+
     
     def home(self):
         if self.motor.get_axis_parameter(self.AP.HomeSwitch) == 0:
@@ -15,9 +16,11 @@ class SpindleController(TMCM1111Controller):
 
         self.motor.set_axis_parameter(self.AP.ActualPosition, 0)
         
-        self.motor.rotate(self.config.get("velocity"))
-        time.sleep(self.config.get("notch_time"))        
-        self.motor.stop()
+        # self.motor.rotate(self.config.get("velocity"))
+        # time.sleep(self.config.get("notch_time"))        
+        # self.motor.stop()
+
+        self.move_to(500, velocity=self.config.get("velocity"))
 
 
     def full_rotation(self):
