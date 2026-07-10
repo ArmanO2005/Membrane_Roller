@@ -35,6 +35,7 @@ class MembraneRoller:
         self.spindle_motor.full_rotation()
         self.feeder_motor.rotate(paired_velocity)
         notch_pos = self.spindle_motor.config.get("notch_position")
+        time.sleep(2)
         while True:
             current_position = self.spindle_motor.motor.get_axis_parameter(self.spindle_motor.AP.ActualPosition)
             if current_position in range(notch_pos - 1000, notch_pos + 1000):
@@ -64,7 +65,6 @@ class MembraneRoller:
         if self.feeder_motor:  self.feeder_motor.reach_tip(rotations_after)
         if self.staker_motor:  self.staker_motor.stake_one(stake1_time, stake1_point)
         if self.spindle_motor: self.tensionless_rotation(paired_velocity)
-        if self.spindle_motor: time.sleep(5)
         if self.staker_motor:  self.staker_motor.stake_two(stake2_time, stake2_point)
         if self.lac:           self.lac.cut()
         if self.clamp_motor:   self.clamp_motor.home()
