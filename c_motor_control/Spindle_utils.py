@@ -20,8 +20,7 @@ class SpindleController(TMCM1111Controller):
         self.move_to(self.config.get("notch_position"), velocity=self.config.get("velocity"))
 
     def full_rotation(self):
-        current_position = self.motor.get_axis_parameter(self.AP.ActualPosition)
-        self.move_to(current_position, velocity=self.config.get("velocity"))
+        self.move_by(self.config.get("full_rotation_steps"), velocity=self.config.get("velocity"))
 
 
     # def full_rotation(self):
