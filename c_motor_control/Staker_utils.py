@@ -21,7 +21,7 @@ class StakerController(TMCM1111Controller):
         self.move_to(1000, velocity=self.config.get("home_search_velocity"))
 
     def home(self):
-        print(f"[{self.name}] AHHHHHHH...")
+        print(f"[{self.name}] Homing started...")
 
         self.motor.rotate(-self.config.get("home_search_velocity"))
         start_time = time.time()
