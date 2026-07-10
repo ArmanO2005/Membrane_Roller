@@ -16,6 +16,7 @@ class MembraneRoller:
         self.spindle_motor= self._try("Spindle", SpindleController, config['spindle'])
         self.feeder_motor = self._try("Feeder",  FeederController,  config['feeder'])
         self.lac          = self._try_lac()
+        self.roll_count   = 0
 
     def _try(self, name, cls, config):
         try:
@@ -38,11 +39,11 @@ class MembraneRoller:
         time.sleep(2)
         while True:
             current_position = (
-                self.spindle_motor.motor.get_axis_parameter(self.spindle_motor.AP.ActualPosition) 
-                - self.spindle_motor.config.get("full_rotation_steps")
+                self.spindle_motor.motor.get_axis_parameter(self.spindle_motor.AP.ActualPosition)
+                - self.roll_count * self.spindle_motor.config.get("full_rotation_steps")
             )
             print(current_position)
-            if current_position in range(notch_pos - 10000, notch_pos + 10000):
+            if current_position in range(notch_pos - 1000, notch_pos + 1000):
                 self.feeder_motor.stop()
                 break
             time.sleep(0.01)
@@ -65,6 +66,7 @@ class MembraneRoller:
         if self.lac:           self.lac.home()
 
     def roll(self, stake1_time=3, stake1_point=310000, stake2_time=5, stake2_point=310000, rotations_after=1.0, paired_velocity=30):
+        self.roll_count += 1
         if self.clamp_motor:   self.clamp_motor.clamp()
         if self.feeder_motor:  self.feeder_motor.reach_tip(rotations_after)
         if self.staker_motor:  self.staker_motor.stake_one(stake1_time, stake1_point)
