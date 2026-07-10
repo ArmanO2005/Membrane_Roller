@@ -76,6 +76,7 @@ class MembraneRoller:
         if self.clamp_motor:   self.clamp_motor.home()
         if self.staker_motor:  self.staker_motor.home()
         if self.spindle_motor: self.spindle_motor.home()
+        if self.spindle_motor: time.sleep(2)
         if self.spindle_motor: self.spindle_motor.move_to_notch()
         if self.lac:           self.lac.home()
 
