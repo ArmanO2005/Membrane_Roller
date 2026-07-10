@@ -40,8 +40,8 @@ class StakerController(TMCM1111Controller):
                 raise TimeoutError(f"[{self.name}] Homing timed out")
             time.sleep(0.01)
 
-    # def home(self):
-    #     self.go_to_0()
+        self.motor.set_axis_parameter(self.AP.ActualPosition, 0)
+        print(f"[{self.name}] Homing complete. Position zeroed.")
 
     def stake_one(self, stake_time=3, stake_point=307000):
         self.go_to_0()
