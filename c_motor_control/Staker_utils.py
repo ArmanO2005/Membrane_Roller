@@ -17,6 +17,9 @@ class StakerController(TMCM1111Controller):
     def disable_heater(self):
         self.clear_digital_output(self.HEATER_PIN)
 
+    def go_to_0(self):
+        self.move_to(1000, velocity=self.config.get("home_search_velocity"))
+
     def home(self):
         print(f"[{self.name}] Homing started...")
 
@@ -36,11 +39,6 @@ class StakerController(TMCM1111Controller):
                 self.motor.stop()
                 raise TimeoutError(f"[{self.name}] Homing timed out")
             time.sleep(0.01)
-
-
-        self.motor.set_axis_parameter(self.AP.ActualPosition, 0)
-        print(f"[{self.name}] Homing complete. Position zeroed.")
-
 
     # def home(self):
     #     self.go_to_0()
