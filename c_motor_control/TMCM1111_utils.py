@@ -84,3 +84,12 @@ class TMCM1111Controller:
         if velocity is not None:
             self.motor.set_axis_parameter(self.AP.MaxPositioningSpeed, velocity)
         self.motor.move_to(position)
+        self.wait_for_position
+
+    def wait_for_position(self):
+        """Block until the motor reaches its target position."""
+        start = time.time()
+        while True:
+            if self.motor.get_axis_parameter(self.AP.PositionReachedFlag):
+                return
+            time.sleep(0.01)

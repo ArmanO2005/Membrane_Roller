@@ -32,28 +32,6 @@ class MembraneRoller:
             return None
         
     def tensionless_rotation(self, paired_velocity=-3):
-        # self.spindle_motor.motor.rotate(self.spindle_motor.config.get("velocity"))
-        # self.feeder_motor.rotate(paired_velocity)
-        # time.sleep(2)
-        # start_time = time.time()
-        # while True:
-        #     not_triggered = self.spindle_motor.motor.get_axis_parameter(self.spindle_motor.AP.HomeSwitch)
-        #     if not not_triggered:
-        #         time.sleep(self.spindle_motor.config.get("home_centering_time") - 0.1)
-        #         print(f"[{self.spindle_motor.name}] Switch triggered.")
-        #         time.sleep(self.spindle_motor.config.get("notch_time"))
-        #         self.spindle_motor.motor.stop()
-        #         self.feeder_motor.stop()
-        #         break
-        #     if time.time() - start_time > self.spindle_motor.config.get("home_timeout"):
-        #         self.spindle_motor.motor.stop()
-        #         self.feeder_motor.stop()
-        #         raise TimeoutError(f"[{self.spindle_motor.name}] Homing timed out")
-        #     time.sleep(0.01)
-
-
-        # self.spindle_motor.motor.set_axis_parameter(self.spindle_motor.AP.ActualPosition, 0)
-
         self.spindle_motor.full_rotation()
         self.feeder_motor.rotate(paired_velocity)
         notch_pos = self.spindle_motor.config.get("notch_position")
