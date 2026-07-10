@@ -38,7 +38,7 @@ class MembraneRoller:
         time.sleep(2)
         while True:
             current_position = self.spindle_motor.motor.get_axis_parameter(self.spindle_motor.AP.ActualPosition)
-            if current_position in range(notch_pos - 1000, notch_pos + 1000):
+            if current_position in range(notch_pos - 10000, notch_pos + 10000):
                 self.feeder_motor.stop()
                 break
             time.sleep(0.01)
