@@ -73,6 +73,7 @@ class TMCM1111Controller:
     
     def move_by(self, distance, velocity=None):
         """Move by a relative distance in microsteps."""
+        self.motor.set_axis_parameter(self.AP.RampType, 0)
         if velocity is not None:
             self.motor.set_axis_parameter(self.AP.MaxPositioningSpeed, velocity)
         self.motor.move_by(distance)
@@ -84,8 +85,6 @@ class TMCM1111Controller:
         while True:
             if self.motor.get_axis_parameter(self.AP.PositionReachedFlag):
                 return
-            if time.time() - start > timeout:
-                raise TimeoutError(f"[{self.name}] Position move timed out")
             time.sleep(0.01)
 
     def move_to(self, position, velocity=None):
