@@ -21,6 +21,7 @@ class TMC4671Controller:
         self.ic = self.module.ics[0]
         self.motor = self.module.motors[0]
         self.AP = self.motor.AP
+        self.check_chip()
         self.initialize()
         print(f"[{self.name}] Connected.")
 
@@ -31,8 +32,14 @@ class TMC4671Controller:
         return self.module.read_register(reg)
 
     def check_chip(self):
-        val = self._read(TMC4671.REG.CHIPINFO_ADDR)
-        print(f"[{self.name}] CHIPINFO: 0x{val:08X}")
+        self._write(TMC4671.REG.CHIPINFO_ADDR, 0)
+        chip_type = self._read(TMC4671.REG.CHIPINFO_DATA)
+        if chip_type != 0x34363731:
+            raise RuntimeError(
+                f"[{self.name}] TMC4671 not responding correctly "
+                f"(expected chip type 0x34363731, got 0x{chip_type:08X})"
+            )
+        print(f"[{self.name}] CHIPINFO: 0x{chip_type:08X} (\"4671\") — connection OK")
 
     def initialize(self):
         REG = TMC4671.REG
