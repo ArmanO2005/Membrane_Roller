@@ -77,7 +77,7 @@ class StakerController(TMCM1111Controller):
                 self.wait_for_stop()
                 centering_time = self.config.get("home_centering_time")
                 if centering_time:
-                    self.motor.rotate(-self.config.get("home_search_velocity"))
+                    self.motor.rotate(-self.config.get("home_search_velocity") / 4)
                     time.sleep(centering_time)
                     self.motor.stop()
                     self.wait_for_stop()
