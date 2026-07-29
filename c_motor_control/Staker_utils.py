@@ -65,6 +65,9 @@ class StakerController(TMCM1111Controller):
                 self.motor.stop()
                 self.wait_for_stop()
 
+            if not_triggered:
+                break
+
         self.motor.rotate(-self.config.get("home_search_velocity"))
         start_time = time.time()
         while True:
