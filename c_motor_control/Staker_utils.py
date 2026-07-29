@@ -56,11 +56,14 @@ class StakerController(TMCM1111Controller):
     def home(self):
         print(f"[{self.name}] Homing started...")
 
-        while self.motor.get_axis_parameter(self.AP.HomeSwitch):
-            self.motor.rotate(self.config.get("home_search_velocity"))
-            time.sleep(2)
-            self.motor.stop()
-            self.wait_for_stop()
+        while True:
+            not_triggered = self.motor.get_axis_parameter(self.AP.HomeSwitch)
+
+            if not not_triggered:
+                self.motor.rotate(self.config.get("home_search_velocity"))
+                time.sleep(2)
+                self.motor.stop()
+                self.wait_for_stop()
 
         self.motor.rotate(-self.config.get("home_search_velocity"))
         start_time = time.time()
