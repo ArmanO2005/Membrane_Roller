@@ -75,13 +75,27 @@ class StakerController(TMCM1111Controller):
             if not not_triggered:
                 self.motor.stop()
                 self.wait_for_stop()
+
+                self.motor.rotate(self.config.get("home_search_velocity"))
+                time.sleep(1)
+                self.motor.stop()
+                self.wait_for_stop()
+
+                self.motor.rotate(-self.config.get("home_search_velocity") // 3)
+                while True:
+                    not_triggered_copy = self.motor.get_axis_parameter(self.AP.HomeSwitch)
+                    if not not_triggered_copy:
+                        self.motor.stop()
+                        self.wait_for_stop()
+                        break
+                    time.sleep(0.001)
+
                 centering_time = self.config.get("home_centering_time")
                 if centering_time:
-                    self.motor.rotate(-self.config.get("home_search_velocity") // 4)
+                    self.motor.rotate(-self.config.get("home_search_velocity") // 3)
                     time.sleep(centering_time)
                     self.motor.stop()
                     self.wait_for_stop()
-                print(f"[{self.name}] Switch triggered.")
                 break
             if time.time() - start_time > self.config.get("home_timeout"):
                 self.motor.stop()
