@@ -135,7 +135,7 @@ class App:
         row_so = self._row(left)
         tk.Label(row_so, text="Spindle — Stake offset:", bg=BG, fg=FG,
                  font=('Segoe UI', 9)).pack(side=tk.LEFT, padx=(0, 4))
-        self.roll_stake_offset_var = tk.StringVar(value="1000")
+        self.roll_stake_offset_var = tk.StringVar(value="2000")
         tk.Entry(row_so, textvariable=self.roll_stake_offset_var, width=5,
                  bg=SURFACE, fg=FG, insertbackground=FG,
                  relief=tk.FLAT, font=('Segoe UI', 9)).pack(side=tk.LEFT)
