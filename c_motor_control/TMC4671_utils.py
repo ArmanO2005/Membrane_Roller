@@ -20,7 +20,11 @@ class TMC4671Controller:
         ).connect()
         # Required on Landungsbruecke to trigger SPI forwarding to the eval
         # board on a cold start (TMCL-IDE does this implicitly on connect).
-        Landungsbruecke(self.interface).detect_board_ids()
+        lb = Landungsbruecke(self.interface)
+        lb.detect_board_ids()
+        mc_id, drv_id = lb.get_board_ids()
+        mc_name, drv_name = lb.get_board_names()
+        print(f"[{self.name}] Detected MC board: {mc_name} (id={mc_id}), Driver board: {drv_name} (id={drv_id})")
         self.module = TMC4671_eval(self.interface, module_id=1)
         self.ic = self.module.ics[0]
         self.motor = self.module.motors[0]
