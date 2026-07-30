@@ -1,6 +1,7 @@
 from pytrinamic.connections import ConnectionManager
 from pytrinamic.evalboards import TMC4671_eval
 from pytrinamic.ic.TMC4671 import TMC4671
+from pytrinamic.modules import Landungsbruecke
 import time
 
 
@@ -17,6 +18,9 @@ class TMC4671Controller:
         self.interface = ConnectionManager(
             f"--interface serial_tmcl --port {self.config.get('port')} --data-rate 115200"
         ).connect()
+        # Required on Landungsbruecke to trigger SPI forwarding to the eval
+        # board on a cold start (TMCL-IDE does this implicitly on connect).
+        Landungsbruecke(self.interface).detect_board_ids()
         self.module = TMC4671_eval(self.interface, module_id=1)
         self.ic = self.module.ics[0]
         self.motor = self.module.motors[0]
