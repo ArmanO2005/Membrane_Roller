@@ -63,12 +63,15 @@ class MembraneRoller:
         if self.spindle_motor: self.spindle_motor.move_to_notch()
         if self.lac:           self.lac.home()
 
-    def roll(self, stake1_time=3, stake1_point=310000, stake2_time=5, stake2_point=310000, rotations_after=1.0, paired_velocity=30):
+    def roll(self, stake1_time=3, stake1_point=310000, stake2_time=5, stake2_point=310000, rotations_after=1.0, paired_velocity=30, stake_offset=1000):
         if self.clamp_motor:   self.clamp_motor.clamp()
         if self.feeder_motor:  self.feeder_motor.reach_tip(rotations_after)
         if self.staker_motor:  self.staker_motor.stake_one(stake1_time, stake1_point)
         if self.spindle_motor: self.tensionless_rotation(paired_velocity)
         if self.staker_motor:  self.staker_motor.stake_two(stake2_time, stake2_point)
+        if self.spindle_motor: self.spindle_motor.move_by(stake_offset)
+        if self.staker_motor:  self.staker_motor.stake_three()
+        if self.spindle_motor: self.spindle_motor.move_by(-stake_offset)
         if self.lac:           self.lac.cut()
         if self.clamp_motor:   self.clamp_motor.home()
         if self.feeder_motor:  self.feeder_motor.pull_back()

@@ -97,7 +97,7 @@ class App:
                  relief=tk.FLAT, font=('Segoe UI', 9)).pack(side=tk.LEFT, padx=(0, 10))
         tk.Label(row_s1, text="Point:", bg=BG, fg=FG,
                  font=('Segoe UI', 9)).pack(side=tk.LEFT, padx=(0, 4))
-        self.roll_stake1_point_var = tk.StringVar(value="305000")
+        self.roll_stake1_point_var = tk.StringVar(value="308700")
         tk.Entry(row_s1, textvariable=self.roll_stake1_point_var, width=8,
                  bg=SURFACE, fg=FG, insertbackground=FG,
                  relief=tk.FLAT, font=('Segoe UI', 9)).pack(side=tk.LEFT)
@@ -111,7 +111,7 @@ class App:
                  relief=tk.FLAT, font=('Segoe UI', 9)).pack(side=tk.LEFT, padx=(0, 10))
         tk.Label(row_s2, text="Point:", bg=BG, fg=FG,
                  font=('Segoe UI', 9)).pack(side=tk.LEFT, padx=(0, 4))
-        self.roll_stake2_point_var = tk.StringVar(value="305000")
+        self.roll_stake2_point_var = tk.StringVar(value="308700")
         tk.Entry(row_s2, textvariable=self.roll_stake2_point_var, width=8,
                  bg=SURFACE, fg=FG, insertbackground=FG,
                  relief=tk.FLAT, font=('Segoe UI', 9)).pack(side=tk.LEFT)
@@ -119,7 +119,7 @@ class App:
         row_rf = self._row(left)
         tk.Label(row_rf, text="Feeder — Rotations after tip:", bg=BG, fg=FG,
                  font=('Segoe UI', 9)).pack(side=tk.LEFT, padx=(0, 4))
-        self.roll_rotations_after_var = tk.StringVar(value="0.223")
+        self.roll_rotations_after_var = tk.StringVar(value="0.225")
         tk.Entry(row_rf, textvariable=self.roll_rotations_after_var, width=5,
                  bg=SURFACE, fg=FG, insertbackground=FG,
                  relief=tk.FLAT, font=('Segoe UI', 9)).pack(side=tk.LEFT)
@@ -129,6 +129,14 @@ class App:
                  font=('Segoe UI', 9)).pack(side=tk.LEFT, padx=(0, 4))
         self.roll_paired_velocity_var = tk.StringVar(value="-3")
         tk.Entry(row_pv, textvariable=self.roll_paired_velocity_var, width=5,
+                 bg=SURFACE, fg=FG, insertbackground=FG,
+                 relief=tk.FLAT, font=('Segoe UI', 9)).pack(side=tk.LEFT)
+
+        row_so = self._row(left)
+        tk.Label(row_so, text="Spindle — Stake offset:", bg=BG, fg=FG,
+                 font=('Segoe UI', 9)).pack(side=tk.LEFT, padx=(0, 4))
+        self.roll_stake_offset_var = tk.StringVar(value="1000")
+        tk.Entry(row_so, textvariable=self.roll_stake_offset_var, width=5,
                  bg=SURFACE, fg=FG, insertbackground=FG,
                  relief=tk.FLAT, font=('Segoe UI', 9)).pack(side=tk.LEFT)
 
@@ -379,10 +387,11 @@ class App:
             s2_point        = int(self.roll_stake2_point_var.get())
             rotations_after = float(self.roll_rotations_after_var.get())
             paired_velocity = int(self.roll_paired_velocity_var.get())
+            stake_offset    = int(self.roll_stake_offset_var.get())
         except ValueError:
             self._append("ERROR: Invalid stake parameter value.\n")
             return
-        self._run(self.roller.roll, s1_time, s1_point, s2_time, s2_point, rotations_after, paired_velocity)
+        self._run(self.roller.roll, s1_time, s1_point, s2_time, s2_point, rotations_after, paired_velocity, stake_offset)
 
     def _do_off(self):
         self._run(self.roller.off)
