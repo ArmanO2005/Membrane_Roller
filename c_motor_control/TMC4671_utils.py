@@ -77,6 +77,11 @@ class TMC4671Controller:
         self._write(REG.PHI_E_SELECTION, 0x00000002)
         self._write(REG.UQ_UD_EXT,       0x00000E17)
 
+        # Engage open-loop UQ_UD_EXT motion mode. Without this the chip stays
+        # in MOTION_MODE_STOPPED after a cold boot, so rotate() writes to
+        # OPENLOOP_VELOCITY_TARGET have no effect on the motor.
+        self._write(REG.MODE_RAMP_MODE_MOTION, 0x00000008)
+
         print(f"[{self.name}] Initialized.")
         self.stop()
 
