@@ -33,7 +33,7 @@ class ClampController(TMCM1111Controller):
         while True:
             triggered = self.motor.get_axis_parameter(self.AP.LeftEndstop) # 1: triggered, 0: not_triggered
             if triggered:
-                time.sleep(0.3)
+                time.sleep(0)
                 self.motor.stop()
                 print(f"[{self.name}] Clamp position reached.")
                 break
