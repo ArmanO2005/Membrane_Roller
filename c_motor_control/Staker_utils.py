@@ -109,12 +109,17 @@ class StakerController(TMCM1111Controller):
         self.go_to_0()
         self.move_to(stake_point, velocity=self.config.get("velocity"))
         time.sleep(stake_time)
-        self.move_to(200000, velocity=(self.config.get("velocity") * 5))
+        self.move_to(200000, velocity=(self.config.get("velocity") * 3))
+
+    def stake_one_half(self, stake_point=307000):
+        self.move_to(stake_point, velocity=self.config.get("velocity"))
+        time.sleep(1)
+        self.move_to(200000, velocity=(self.config.get("velocity") * 3))
     
     def stake_two(self, stake_time=5, stake_point=307000):
         self.move_to(stake_point, velocity=self.config.get("velocity"))
         time.sleep(stake_time)
-        self.move_to(250000, velocity=self.config.get("velocity"))
+        self.move_to(250000, velocity=(self.config.get("velocity") * 3))
 
     def stake_three(self, stake_point=307000):
         self.move_to(stake_point, velocity=self.config.get("velocity"))

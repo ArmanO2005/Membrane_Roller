@@ -67,6 +67,7 @@ class MembraneRoller:
         if self.clamp_motor:   self.clamp_motor.clamp()
         if self.feeder_motor:  self.feeder_motor.reach_tip(rotations_after)
         if self.staker_motor:  self.staker_motor.stake_one(stake1_time, stake1_point)
+        if self.staker_motor:  self.staker_motor.stake_one_half(stake1_point)
         if self.spindle_motor: self.tensionless_rotation(paired_velocity)
         if self.staker_motor:  self.staker_motor.stake_two(stake2_time, stake2_point)
         if self.spindle_motor: self.spindle_motor.move_by(-stake_offset)
