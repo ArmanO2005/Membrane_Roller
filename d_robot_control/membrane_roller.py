@@ -72,7 +72,7 @@ class MembraneRoller:
         if self.staker_motor:  self.staker_motor.stake_two(stake2_time, stake2_point)
         if self.staker_motor:  self.staker_motor.variable_stake(stake2_point, end_pos=270000)
         if self.spindle_motor: self.spindle_motor.move_by(-stake_offset)
-        if self.staker_motor:  self.staker_motor.variable_stake(stake2_point)
+        if self.staker_motor:  self.staker_motor.variable_stake(stake2_point - 200)
         if self.spindle_motor: self.spindle_motor.move_by(stake_offset)
         if self.lac:           self.lac.cut()
         if self.clamp_motor:   self.clamp_motor.home()
