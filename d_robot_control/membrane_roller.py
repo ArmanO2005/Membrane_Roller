@@ -7,6 +7,7 @@ from c_motor_control.Spindle_utils import SpindleController
 from c_motor_control.Actuonix_LAC_utils import LAC
 import time
 import yaml
+from concurrent.futures import ThreadPoolExecutor
 
 
 class MembraneRoller:
@@ -74,9 +75,18 @@ class MembraneRoller:
         if self.spindle_motor: self.spindle_motor.move_by(-stake_offset)
         if self.staker_motor:  self.staker_motor.variable_stake(stake2_point - 400)
         if self.spindle_motor: self.spindle_motor.move_by(stake_offset)
-        if self.lac:           self.lac.cut()
-        if self.clamp_motor:   self.clamp_motor.home()
+        self._run_concurrently(
+            self.lac.cut if self.lac else None,
+            self.clamp_motor.home if self.clamp_motor else None,
+        )
         if self.feeder_motor:  self.feeder_motor.pull_back()
+
+    def _run_concurrently(self, *tasks):
+        tasks = [t for t in tasks if t is not None]
+        with ThreadPoolExecutor(max_workers=len(tasks) or 1) as pool:
+            futures = [pool.submit(t) for t in tasks]
+        for f in futures:
+            f.result()  # re-raise any exception from the worker threads
 
     def off(self):
         if self.staker_motor:  self.staker_motor.disable_heater()
