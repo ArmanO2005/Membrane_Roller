@@ -75,9 +75,20 @@ class MembraneRoller:
         if self.staker_motor:  self.staker_motor.stake_two(stake2_time, stake2_point)
         if self.staker_motor:  self.staker_motor.variable_stake(stake2_point, end_pos=270000)
         if self.spindle_motor: self.spindle_motor.move_by(-stake_offset)
-        if self.staker_motor:  self.staker_motor.variable_stake(stake2_point - 400)
-        if self.spindle_motor: self.spindle_motor.move_by(stake_offset)
+        # Final stake: press and hold, then start the cut/clamp release as soon as the
+        # staker lifts off, rather than waiting for it to reach the top.
+        if self.staker_motor:
+            self.staker_motor.move_to(stake2_point - 400)
+            time.sleep(1)
+
+        def retract_staker_and_reset_spindle():
+            if self.staker_motor:
+                self.staker_motor.go_to_0()
+                self.staker_motor.move_to(0, velocity=self.staker_motor.config.get("velocity") * 3)
+            if self.spindle_motor: self.spindle_motor.move_by(stake_offset)
+
         self._run_concurrently(
+            retract_staker_and_reset_spindle,
             self.lac.cut if self.lac else None,
             self.clamp_motor.home if self.clamp_motor else None,
         )
