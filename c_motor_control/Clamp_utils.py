@@ -14,6 +14,7 @@ class ClampController(TMCM1111Controller):
         start_time = time.time()
         while True:
             not_triggered = self.motor.get_axis_parameter(self.AP.HomeSwitch) # 0: triggered, 1: not_triggered
+            print(not_triggered)
             if not not_triggered:
                 time.sleep(self.config.get("home_centering_time"))
                 self.motor.stop()
