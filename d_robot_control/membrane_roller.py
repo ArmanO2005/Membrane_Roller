@@ -66,8 +66,10 @@ class MembraneRoller:
 
     def roll(self, stake1_time=3, stake1_point=310000, stake2_time=5, stake2_point=310000, rotations_after=1.0, paired_velocity=30, stake_offset=1000):
         if self.clamp_motor:   self.clamp_motor.clamp()
-        if self.feeder_motor:  self.feeder_motor.reach_tip(rotations_after)
-        if self.staker_motor:  self.staker_motor.stake_one(stake1_time, stake1_point)
+        self._run_concurrently(
+            (lambda: self.feeder_motor.reach_tip(rotations_after)) if self.feeder_motor else None,
+            (lambda: self.staker_motor.stake_one(stake1_time, stake1_point)) if self.staker_motor else None,
+        )
         if self.staker_motor:  self.staker_motor.variable_stake(stake1_point, end_pos=270000)
         if self.spindle_motor: self.tensionless_rotation(paired_velocity)
         if self.staker_motor:  self.staker_motor.stake_two(stake2_time, stake2_point)
