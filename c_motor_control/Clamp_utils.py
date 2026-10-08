@@ -1,5 +1,6 @@
 from c_motor_control.TMCM1111_utils import TMCM1111Controller
 import time
+from c_motor_control import abort
 
 
 
@@ -15,14 +16,14 @@ class ClampController(TMCM1111Controller):
         while True:
             not_triggered = self.motor.get_axis_parameter(self.AP.HomeSwitch) # 0: triggered, 1: not_triggered
             if not not_triggered:
-                time.sleep(self.config.get("home_centering_time"))
+                abort.sleep(self.config.get("home_centering_time"))
                 self.motor.stop()
                 print(f"[{self.name}] Switch triggered.")
                 break
             if time.time() - start_time > self.config.get("home_timeout"):
                 self.motor.stop()
                 raise TimeoutError(f"[{self.name}] Homing timed out")
-            time.sleep(0.01)
+            abort.sleep(0.01)
 
 
         self.motor.set_axis_parameter(self.AP.ActualPosition, 0)
@@ -31,9 +32,10 @@ class ClampController(TMCM1111Controller):
     def clamp(self):
         self.motor.rotate(-self.config.get("velocity"))
         while True:
+            abort.check()
             triggered = self.motor.get_axis_parameter(self.AP.LeftEndstop) # 1: triggered, 0: not_triggered
             if triggered:
-                time.sleep(0)
+                abort.sleep(0)
                 self.motor.stop()
                 print(f"[{self.name}] Clamp position reached.")
                 break

@@ -8,6 +8,7 @@ from c_motor_control.Actuonix_LAC_utils import LAC
 import time
 import yaml
 from concurrent.futures import ThreadPoolExecutor
+from c_motor_control import abort
 
 
 class MembraneRoller:
@@ -36,7 +37,7 @@ class MembraneRoller:
         self.spindle_motor.full_rotation()
         self.feeder_motor.rotate(paired_velocity)
         notch_pos = self.spindle_motor.config.get("notch_position")
-        time.sleep(2)
+        abort.sleep(2)
         while True:
             current_position = (
                 self.spindle_motor.motor.get_axis_parameter(self.spindle_motor.AP.ActualPosition)
@@ -45,7 +46,7 @@ class MembraneRoller:
             if current_position in range(notch_pos - 1000, notch_pos + 1000):
                 self.feeder_motor.stop()
                 break
-            time.sleep(0.01)
+            abort.sleep(0.01)
 
     def close(self):
         for motor in (self.clamp_motor, self.staker_motor, self.spindle_motor, self.feeder_motor):
@@ -60,7 +61,7 @@ class MembraneRoller:
         if self.clamp_motor:   self.clamp_motor.home()
         if self.staker_motor:  self.staker_motor.home()
         if self.spindle_motor: self.spindle_motor.home()
-        if self.spindle_motor: time.sleep(2)
+        if self.spindle_motor: abort.sleep(2)
         if self.spindle_motor: self.spindle_motor.move_to_notch()
         if self.lac:           self.lac.home()
 
@@ -79,7 +80,7 @@ class MembraneRoller:
         # staker lifts off, rather than waiting for it to reach the top.
         if self.staker_motor:
             self.staker_motor.move_to(stake2_point - 400)
-            time.sleep(1)
+            abort.sleep(1)
 
         def retract_staker_and_reset_spindle():
             if self.staker_motor:
@@ -100,6 +101,30 @@ class MembraneRoller:
             futures = [pool.submit(t) for t in tasks]
         for f in futures:
             f.result()  # re-raise any exception from the worker threads
+
+    def request_stop(self):
+        """Signal any running operation to abort. Safe to call from another thread."""
+        abort.request()
+
+    def stop_and_home(self):
+        """Halt every motor, then return all components to their homed position.
+        Call only once the aborted operation's thread has exited."""
+        abort.clear()
+        for motor in (self.clamp_motor, self.staker_motor, self.spindle_motor, self.feeder_motor):
+            if motor is not None:
+                try:
+                    motor.stop()
+                except Exception as e:
+                    print(f"[{motor.name}] Stop failed: {e}")
+        # Lift the staker and retract the cutter clear of the membrane first,
+        # then release the clamp before turning the spindle.
+        self._run_concurrently(
+            self.staker_motor.home if self.staker_motor else None,
+            self.lac.home if self.lac else None,
+        )
+        if self.clamp_motor:   self.clamp_motor.home()
+        if self.spindle_motor: self.spindle_motor.home()
+        print("Stopped. All components homed.")
 
     def off(self):
         if self.staker_motor:  self.staker_motor.disable_heater()

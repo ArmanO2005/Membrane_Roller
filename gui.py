@@ -5,6 +5,7 @@ import queue
 import sys
 import yaml
 from pathlib import Path
+from c_motor_control.abort import AbortedError
 
 _CONFIG_PATH = Path(__file__).parent / 'a_config' / 'motor_config.yaml'
 
@@ -46,6 +47,8 @@ class App:
         self._log_q: queue.Queue = queue.Queue()
         self.roller = None
         self._busy = False
+        self._stopping = False
+        self._worker = None
         self._all_btns: list = []
         self._sequence_btns: list = []
         self._subsystem_btns: dict = {}  # subsystem name -> list of widgets
@@ -87,6 +90,12 @@ class App:
         self._btn(row, "Initialize", self._do_initialize, GREEN, sequence=True).pack(side=tk.LEFT, padx=(0, 4))
         self._btn(row, "Roll",       self._do_roll,       BLUE,  sequence=True).pack(side=tk.LEFT, padx=(0, 4))
         self._btn(row, "Shutdown",   self._do_off,        RED,   sequence=True).pack(side=tk.LEFT)
+        # Not registered via _btn so _lock() leaves it clickable while an operation runs.
+        self.stop_btn = tk.Button(row, text="STOP", command=self._do_stop,
+                                  bg=RED, fg=BG2, activebackground=FG,
+                                  font=('Segoe UI', 9, 'bold'),
+                                  relief=tk.FLAT, padx=12, pady=5, cursor='hand2')
+        self.stop_btn.pack(side=tk.LEFT, padx=(12, 0))
 
         row_s1 = self._row(left)
         tk.Label(row_s1, text="Stake 1 — Time (s):", bg=BG, fg=FG,
@@ -280,6 +289,7 @@ class App:
         live = self.roller is not None
         self.connect_btn.configure(state=tk.DISABLED if live else tk.NORMAL)
         self.disconnect_btn.configure(state=tk.NORMAL if live else tk.DISABLED)
+        self.stop_btn.configure(state=tk.NORMAL if live and not self._stopping else tk.DISABLED)
 
         if not live:
             for btns in self._subsystem_btns.values():
@@ -331,13 +341,17 @@ class App:
         def worker():
             try:
                 fn(*args)
+            except AbortedError:
+                sys.stdout.write("Operation aborted.\n")
             except Exception as exc:
                 sys.stdout.write(f"ERROR: {exc}\n")
             finally:
-                self._busy = False
-                self.root.after(0, self._unlock)
+                if not self._stopping:
+                    self._busy = False
+                    self.root.after(0, self._unlock)
 
-        threading.Thread(target=worker, daemon=True).start()
+        self._worker = threading.Thread(target=worker, daemon=True)
+        self._worker.start()
 
     # ----------------------------------------------------------------- log
 
@@ -375,6 +389,31 @@ class App:
         self.roller = None
         self._update_conn_state()
         self._append("Disconnected.\n")
+
+    def _do_stop(self):
+        if self.roller is None or self._stopping:
+            return
+        self._stopping = True
+        self._busy = True
+        self.roller.request_stop()
+        self._lock()
+        self.stop_btn.configure(state=tk.DISABLED)
+        self._append("■ STOP requested — aborting and homing all components...\n")
+        running = self._worker
+
+        def stopper():
+            try:
+                if running is not None:
+                    running.join()
+                self.roller.stop_and_home()
+            except Exception as exc:
+                sys.stdout.write(f"ERROR during stop: {exc}\n")
+            finally:
+                self._stopping = False
+                self._busy = False
+                self.root.after(0, self._unlock)
+
+        threading.Thread(target=stopper, daemon=True).start()
 
     def _do_initialize(self):
         self._run(self.roller.initialize)

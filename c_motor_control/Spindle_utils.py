@@ -1,5 +1,6 @@
 from c_motor_control.TMCM1111_utils import TMCM1111Controller
 import time
+from c_motor_control import abort
 
 class SpindleController(TMCM1111Controller):
     def __init__(self, config):
@@ -9,7 +10,7 @@ class SpindleController(TMCM1111Controller):
     def home(self):
         if self.motor.get_axis_parameter(self.AP.HomeSwitch) == 0:
             self.motor.rotate(self.config.get("velocity"))
-            time.sleep(2)
+            abort.sleep(2)
             self.motor.stop()
 
         super().home()

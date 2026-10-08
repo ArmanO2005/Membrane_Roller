@@ -5,6 +5,7 @@ import usb.core
 import usb.backend.libusb1
 import time
 from pathlib import Path
+from c_motor_control import abort
 
 
 def _find_libusb_dll():
@@ -98,6 +99,6 @@ class LAC:
         """Move to fully extended position."""
         self.set_position(900)
         while self.get_feedback() < 850:
-            time.sleep(0.05)
+            abort.sleep(0.05)
         self.set_position(0)
 

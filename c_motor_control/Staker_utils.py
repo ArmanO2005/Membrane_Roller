@@ -1,5 +1,6 @@
 from c_motor_control.TMCM1111_utils import TMCM1111Controller
 import time
+from c_motor_control import abort
 
 
 
@@ -61,7 +62,7 @@ class StakerController(TMCM1111Controller):
 
             if not not_triggered:
                 self.motor.rotate(self.config.get("home_search_velocity"))
-                time.sleep(2)
+                abort.sleep(2)
                 self.motor.stop()
                 self.wait_for_stop()
 
@@ -77,7 +78,7 @@ class StakerController(TMCM1111Controller):
                 self.wait_for_stop()
 
                 self.motor.rotate(self.config.get("home_search_velocity"))
-                time.sleep(1)
+                abort.sleep(1)
                 self.motor.stop()
                 self.wait_for_stop()
 
@@ -88,19 +89,19 @@ class StakerController(TMCM1111Controller):
                         self.motor.stop()
                         self.wait_for_stop()
                         break
-                    time.sleep(0.001)
+                    abort.sleep(0.001)
 
                 centering_time = self.config.get("home_centering_time")
                 if centering_time:
                     self.motor.rotate(-self.config.get("home_search_velocity") // 3)
-                    time.sleep(centering_time)
+                    abort.sleep(centering_time)
                     self.motor.stop()
                     self.wait_for_stop()
                 break
             if time.time() - start_time > self.config.get("home_timeout"):
                 self.motor.stop()
                 raise TimeoutError(f"[{self.name}] Homing timed out")
-            time.sleep(0.01)
+            abort.sleep(0.01)
 
         self.motor.set_axis_parameter(self.AP.ActualPosition, 0)
         print(f"[{self.name}] Homing complete. Position zeroed.")
@@ -108,17 +109,17 @@ class StakerController(TMCM1111Controller):
     def stake_one(self, stake_time=3, stake_point=307000):
         self.go_to_0()
         self.move_to(stake_point, velocity=self.config.get("velocity"))
-        time.sleep(stake_time)
+        abort.sleep(stake_time)
         self.move_to(270000, velocity=(self.config.get("velocity") * 3))
     
     def stake_two(self, stake_time=5, stake_point=307000):
         self.move_to(stake_point, velocity=self.config.get("velocity"))
-        time.sleep(stake_time)
+        abort.sleep(stake_time)
         self.move_to(270000, velocity=(self.config.get("velocity") * 3))
 
     def variable_stake(self, stake_point, stake_time=1, end_pos=0):
         self.move_to(stake_point)
-        time.sleep(stake_time)
+        abort.sleep(stake_time)
         if end_pos == 0:
             self.go_to_0()
         self.move_to(end_pos, velocity=(self.config.get("velocity") * 3))

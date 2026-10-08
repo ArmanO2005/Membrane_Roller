@@ -1,6 +1,7 @@
 from c_motor_control.TMC4671_utils import TMC4671Controller
 from pytrinamic.ic.TMC4671 import TMC4671
 import time
+from c_motor_control import abort
 
 class FeederController(TMC4671Controller):
     def __init__(self, config):
@@ -21,11 +22,11 @@ class FeederController(TMC4671Controller):
             if time.time() - start_time > self.config.get("tip_timeout"):
                 self.stop()
                 raise TimeoutError(f"[{self.name}] Tip detection timed out")
-            time.sleep(0.01)
+            abort.sleep(0.01)
 
     def reload(self):
         self.rotate(-self.config.get("velocity"))
-        time.sleep(0.2)
+        abort.sleep(0.2)
         self.stop()
 
     def pull_back(self):
@@ -40,4 +41,4 @@ class FeederController(TMC4671Controller):
             if time.time() - start_time > self.config.get("tip_timeout"):
                 self.stop()
                 raise TimeoutError(f"[{self.name}] Tip detection timed out")
-            time.sleep(0.01)
+            abort.sleep(0.01)

@@ -1,6 +1,7 @@
 from pytrinamic.connections import ConnectionManager
 from pytrinamic.modules.TMCM1111 import TMCM1111
 import time
+from c_motor_control import abort
 
 # import RPi.GPIO as GPIO
 
@@ -24,7 +25,7 @@ class TMCM1111Controller:
         while True:
             not_triggered = self.motor.get_axis_parameter(self.AP.HomeSwitch) # 0: triggered, 1: not_triggered
             if not not_triggered:
-                time.sleep(self.config.get("home_centering_time"))
+                abort.sleep(self.config.get("home_centering_time"))
                 self.motor.stop()
                 self.wait_for_stop()
                 print(f"[{self.name}] Switch triggered.")
@@ -32,7 +33,7 @@ class TMCM1111Controller:
             if time.time() - start_time > self.config.get("home_timeout"):
                 self.motor.stop()
                 raise TimeoutError(f"[{self.name}] Homing timed out")
-            time.sleep(0.01)
+            abort.sleep(0.01)
 
 
         self.motor.set_axis_parameter(self.AP.ActualPosition, 0)
@@ -54,7 +55,7 @@ class TMCM1111Controller:
                 return
             if time.time() - start > timeout:
                 raise TimeoutError(f"[{self.name}] Motor did not come to a stop in time")
-            time.sleep(0.01)
+            abort.sleep(0.01)
 
     def close(self):
         self.interface.close()
@@ -92,4 +93,4 @@ class TMCM1111Controller:
         while True:
             if self.motor.get_axis_parameter(self.AP.PositionReachedFlag):
                 return
-            time.sleep(0.01)
+            abort.sleep(0.01)

@@ -3,6 +3,7 @@ from pytrinamic.evalboards import TMC4671_eval
 from pytrinamic.ic.TMC4671 import TMC4671
 from pytrinamic.modules import Landungsbruecke
 import time
+from c_motor_control import abort
 
 
 class TMC4671Controller:
@@ -118,7 +119,7 @@ class TMC4671Controller:
         duration = abs(rotations) / mech_rps
         direction = 1 if rotations >= 0 else -1
         self.rotate(direction * speed)
-        time.sleep(duration)
+        abort.sleep(duration)
         self.stop()
 
     def stop(self):
